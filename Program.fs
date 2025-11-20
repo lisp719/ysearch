@@ -46,7 +46,15 @@ module Views =
     let index () =
         [ form
               [ _method "post"; _target "_blank" ]
-              [ fieldset [] [ input [ _type "text"; _name "query"; _placeholder "Enter search query"; _required ] ]
+              [ fieldset
+                    []
+                    [ input [ _type "text"; _name "query"; _placeholder "Enter search query"; _required ]
+                      label
+                          []
+                          [ select
+                                [ _name "filter" ]
+                                [ option [ _value "CAISAhgD"; _selected ] [ encodedText "アップロード日" ]
+                                  option [ _value "CAASBBABGAM%253D" ] [ encodedText "関練度" ] ] ] ]
                 button [ _type "submit" ] [ encodedText "Search" ] ] ]
         |> layout
 
@@ -63,13 +71,12 @@ let searchHandler =
         task {
             let form = ctx.Request.Form
             let query = form["query"].ToString()
+            let sp = form["filter"].ToString()
             let baseUrl = "https://www.youtube.com"
 
             if String.IsNullOrWhiteSpace(query) then
                 return! redirectTo false baseUrl next ctx
             else
-                let sp = "CAISBBABGAM%253D"
-
                 let youtubeUrl =
                     $"{baseUrl}/results?search_query={Uri.EscapeDataString(query)}&sp={sp}"
 
